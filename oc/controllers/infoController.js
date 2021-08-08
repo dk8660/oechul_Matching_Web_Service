@@ -15,11 +15,12 @@ export const getinfo = async (request, response) => {
 }
 
 export const getinfo_process = async (request, response) => {
-    const {STnumber, Name, Field, instagramID, kakaoID, KoM, OwnMBTI, WantedMBTI, Major, MilitaryService, Smoker, Fre_Drinking, Bodyform, Hobby, SameMajor, O_MilitaryService, O_Smoker, O_Fre_Drinking} = request.body
+    const {STnumber, Name, Gender, Field, instagramID, kakaoID, KoM, OwnMBTI, WantedMBTI, Major, MilitaryService, Smoker, Fre_Drinking, Bodyform, Hobby, SameGender, SameMajor, O_MilitaryService, O_Smoker, O_Fre_Drinking} = request.body
     const info = new StudentInfo({
       _id: Number(STnumber),
       STnumber: STnumber,
       Name: Name,
+      Gender: Gender,
       Field: Field.split(",").map((word) => `${word}`),
       instagramID: instagramID,
       kakaoID: kakaoID,
@@ -31,6 +32,7 @@ export const getinfo_process = async (request, response) => {
       Smoker: Smoker,
       Fre_Drinking: Fre_Drinking,
       Bodyform: Bodyform,
+      SameGender: SameGender,
       Hobby: Hobby,
       SameMajor: SameMajor,
       O_MilitaryService: O_MilitaryService,
@@ -66,11 +68,12 @@ export const update_process = async (request, response) => {
 }
 
 export const edit_process = async (request, response) => {
-    const {STnumber, Name, Field, instagramID, kakaoID, KoM, OwnMBTI, WantedMBTI, Major, MilitaryService, Smoker, Fre_Drinking, Bodyform, Hobby, SameMajor, O_MilitaryService, O_Smoker, O_Fre_Drinking, Matched, isMatched} = request.body
+    const {STnumber, Name, Gender, Field, instagramID, kakaoID, KoM, OwnMBTI, WantedMBTI, Major, MilitaryService, Smoker, Fre_Drinking, Bodyform, Hobby, SameGender, SameMajor, O_MilitaryService, O_Smoker, O_Fre_Drinking, MatchedPeople, MatchedScore, isMatched} = request.body
     await StudentInfo.findById(Number(STnumber), (error, info) => {
       info._id = Number(STnumber),
       info.STnumber = STnumber,
       info.Name = Name,
+      info.Gender = Gender,
       info.Field = Field.split(",").map((word) => `${word}`),
       info.instagramID = instagramID,
       info.kakaoID = kakaoID,
@@ -83,11 +86,13 @@ export const edit_process = async (request, response) => {
       info.Fre_Drinking = Fre_Drinking,
       info.Bodyform = Bodyform,
       info.Hobby = Hobby,
+      info.SameGender = SameGender,
       info.SameMajor = SameMajor,
       info.O_MilitaryService = O_MilitaryService,
       info.O_Smoker = O_Smoker,
       info.O_Fre_Drinking = O_Fre_Drinking,
-      info.Matched = Matched,
+      info.MatchedPeople = MatchedPeople,
+      info.MatchedScore = MatchedScore,
       info.isMatched = isMatched
   
       info.save()
