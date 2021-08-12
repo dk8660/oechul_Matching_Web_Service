@@ -28,4 +28,5 @@ block content
         input(placeholder="매칭된 사람들", type='text', name='MatchedPeople', value=info.MatchedPeople.join(","))
         input(placeholder="매칭된 사람들", type='text', name='MatchedScore', value=info.MatchedScore.join(","))
         input(placeholder="매칭 완료", required, type='text', name='isMatched', value=String(info.isMatched))
+        input(placeholder="매칭이 성사된 사람", type='text', name='selectedPerson', value=info.selectedPerson)
         input(type='submit', value='Submit')

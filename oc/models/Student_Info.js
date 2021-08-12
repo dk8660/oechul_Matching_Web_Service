@@ -24,7 +24,8 @@ const Student_InfoSchema = new mongoose.Schema({
     O_Fre_Drinking : {type: String, required: true},
     MatchedPeople: [{type: Number}],
     MatchedScore: [{type: Number}],
-    isMatched: {type: Boolean, default: false}
+    isMatched: {type: Boolean, default: false},
+    selectedPerson: {type: String}
 })
 
 const StInfo_Model = mongoose.model("StudentInfo", Student_InfoSchema)

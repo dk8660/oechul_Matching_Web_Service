@@ -68,7 +68,7 @@ export const update_process = async (request, response) => {
 }
 
 export const edit_process = async (request, response) => {
-    const {STnumber, Name, Gender, Field, instagramID, kakaoID, KoM, OwnMBTI, WantedMBTI, Major, MilitaryService, Smoker, Fre_Drinking, Bodyform, Hobby, SameGender, SameMajor, O_MilitaryService, O_Smoker, O_Fre_Drinking, MatchedPeople, MatchedScore, isMatched} = request.body
+    const {STnumber, Name, Gender, Field, instagramID, kakaoID, KoM, OwnMBTI, WantedMBTI, Major, MilitaryService, Smoker, Fre_Drinking, Bodyform, Hobby, SameGender, SameMajor, O_MilitaryService, O_Smoker, O_Fre_Drinking, MatchedPeople, MatchedScore, isMatched, selectedPerson} = request.body
     await StudentInfo.findById(Number(STnumber), (error, info) => {
       info._id = Number(STnumber),
       info.STnumber = STnumber,
@@ -93,7 +93,8 @@ export const edit_process = async (request, response) => {
       info.O_Fre_Drinking = O_Fre_Drinking,
       info.MatchedPeople = MatchedPeople,
       info.MatchedScore = MatchedScore,
-      info.isMatched = isMatched
+      info.isMatched = isMatched,
+      info.selectedPerson = selectedPerson
   
       info.save()
     })
