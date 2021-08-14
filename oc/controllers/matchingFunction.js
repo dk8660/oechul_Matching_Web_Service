@@ -378,36 +378,44 @@ export const matching = async (request, response) => {
 
 export const select = async (request, response) => {
     try {
-        let prev = null;
         while(1) {
             const infos = await StudentInfo.find({isMatched: false}) // 매칭이 되지 않은 모든 사람들 불러오기
-            if(infos == prev) break;
         
             infos.sort(function(a, b) { // 매칭 후보의 수를 비교하여 오름차순으로 정렬
                 return a.MatchedPeople.length - b.MatchedPeople.length
             })
-    
-            let max = 0
-            for(let j = 1; j < infos[0].MatchedPeople.length; j++) { // 점수가 가장 높은 후보를 선택
-                if(infos[0].MatchedScore[max] < infos[0].MatchedScore[j]) max = j;
+            
+            let index = 0;
+            for(let i = 0; i < infos.length; i++) { 
+                if(infos[i].MatchedPeople.length > 0) { // 매칭 가능한 후보가 있으면 매칭 시작
+                    index = i
+                    break
+                }
+                if(i == infos.length - 1) {return response.render('select')} // 매칭이 성사될 수 없는 사람을 제외하고 모든 사람의 매칭이 끝나면 종료
             }
-            let a = infos[0].STnumber
-            let b = infos[0].MatchedPeople[max]
+
+            let max = 0
+            for(let j = 1; j < infos[index].MatchedPeople.length; j++) { // 점수가 가장 높은 후보를 선택
+                if(infos[index].MatchedScore[max] < infos[index].MatchedScore[j]) max = j;
+            }
+            let a = infos[index].STnumber
+            let b = infos[index].MatchedPeople[max]
             await StudentInfo.updateOne({STnumber: a}, {MatchedPeople: [null], MatchedScore: [null], isMatched: true, selectedPerson: b}) // 선택된 후보를 DB에 저장
             await StudentInfo.updateOne({STnumber: b}, {MatchedPeople: [null], MatchedScore: [null], isMatched: true, selectedPerson: a})
             
-            for(let i = 1;  i< infos.length; i++) { // 매칭이 완료된 사람들은 다른 사람들의 후보 리스트에서 제외
-                let index = 0
-                for(let j = 0; j < infos[i].MatchedPeople.length; j++) {
-                    if(infos[i].MatchedPeople[index] == a || infos[i].MatchedPeople[index] == b) {
-                        infos[i].MatchedPeople.splice(index, 1)
-                        infos[i].MatchedScore.splice(index, 1)
+            const updateInfos = await StudentInfo.find({isMatched: false})
+            for(let i = 1;  i< updateInfos.length; i++) { // 매칭이 완료된 사람들은 다른 사람들의 후보 리스트에서 제외
+                index = 0
+                for(let j = 0; j < updateInfos[i].MatchedPeople.length; j++) {
+                    if(updateInfos[i].MatchedPeople[index] == a || infos[i].MatchedPeople[index] == b) {
+                        updateInfos[i].MatchedPeople.splice(index, 1)
+                        updateInfos[i].MatchedScore.splice(index, 1)
                         index--
                     }
                     index++
                 }
+                await StudentInfo.updateOne({STnumber: updateInfos[i].STnumber}, {MatchedPeople: updateInfos[i].MatchedPeople, MatchedScore: updateInfos[i].MatchedScore})
             }
-            prev = infos
         }
 
         return response.render('select')
