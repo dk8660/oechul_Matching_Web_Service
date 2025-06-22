@@ -7,9 +7,14 @@ This project is a university-focused group and individual meeting web service ta
 ## Project Overview
 
 - **Service Name**: OECHUL (외출)
+- - **Development Period**: 2021.07 ~ 2022.06
 - **Type**: Web-based matching platform (beta version)
 - **Target Users**: Korean university students
 - **Development Scope**: Frontend, backend, matching algorithm, and local DB integration completed
+- **Number of Team Member**: 4 person
+- **Role**: Backend, Server, Matching Algorithm
+- **Framework**: Express.js, React.js, MongoDB
+- **How to Learn**: Online Lecture, Web Search
 
 ---
 
